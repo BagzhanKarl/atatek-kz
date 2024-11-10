@@ -1,0 +1,112 @@
+{% extends 'main/base.html' %}
+{% block title %}
+Алаш
+{% endblock %}
+
+{% block my_page %} {{ page }} {% endblock %}
+{% block newsmy %} {{ page }} {% endblock %}
+{% block mymb %} {{ page }} {% endblock %}
+{% block newsmymb %} {{ page }} {% endblock %}
+
+{% block body %}
+    <div id="sample">
+        <div id="myDiagramDiv" class="samplepage"></div>
+        <div class="div d-flex gap-3 justify-content-between" style="position: fixed; z-index: 1001; right: 5%; top: 20%">
+            <button id="toggleAngle" class="btn btn-primary">
+                <img src="{{ url_for('static', filename='images/90.svg') }}" width="25" class="a90" alt="">
+                <img src="{{ url_for('static', filename='images/0.svg') }}" width="25" class="a0" style="display: none" alt="">
+            </button>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 start-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">ATATEK</strong>
+                <small>Қазір</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="usernameinfo">
+                Бұл адамның балалары туралы ақпарат жоқ!
+            </div>
+        </div>
+    </div>
+    <div class="pers-modal" id="personal-modal" onclick="">
+        <div class="close-dark-panel" onclick="closeModal()"></div>
+        <div class="modal-container" id="modal-content">
+            <div class="header-personal-modal">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <div>
+                            <img src="../images/flag-outline.svg" width="30" height="30" alt="">
+                        </div>
+                        <div class="h3 card-title">
+                            Алаш
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeModal()" class="btn-close" aria-label="Close"></button>
+                </div>
+            </div>
+            <hr>
+            <div class="modal-body">
+                <div id="data">
+                    <div>Әзірше Алаш туралы ақпарат жоқ</div>
+
+                    <hr>
+                    <div class="d-flex gap-2 mb-3">
+                        <div><b>Ататектегі ID:</b></div>
+                        <div>1</div>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <label for="">Бөлісу </label>
+                        <input type="text" id="link" readonly onclick="" class="form-control" value="https://alash.atatek.kz/share/1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const familyData = [
+            { id: 1, name: 'Алаш', gender: 'M', status: 'notmy', born: null, death: null, info: "have"},
+        ];
+        function noDate(name){
+            const toastLiveExample = document.getElementById('liveToast')
+            const toast = new bootstrap.Toast(toastLiveExample)
+            $('#usernameinfo').text(name + '! Бұл адамның балалары туралы ақпарат жоқ!')
+            toast.show()
+            setTimeout(() => {
+                toast.hide()
+            }, 5000)
+        }
+        const theme = {
+            colors: {
+                maleBadgeBackground: '{{ set.male_badge_background }}',
+                maleBadgeText: '{{ set.male_badge_text }}',
+                civilianBorder: '{{ set.civilian_border }}',
+                personalBorder: '{{ set.person_border }}',
+                personText: '{{ set.person_text }}',
+                personNodeBackground: '{{ set.person_node_background }}',
+                link: '{{ set.person_text }}'
+            },
+            fonts: {
+                badgeFont: '{{ set.bage_font_style }} {{set.bage_font_size}}px Montserrat',
+                birthDeathFont: '{{ set.date_font_style }} {{set.date_font_size}}px Montserrat',
+                nameFont: '{{ set.main_font_style }} {{set.main_font_size}}px Montserrat',
+            },
+            sizes: {
+                stroke: {{ set.stroke }},
+                radius: {{ set.radius }},
+                nodespace: {{ set.nodespace }},
+                layerspace: {{ set.layerspace }},
+                nodeX: {{ set.node_x }},
+                nodeY: {{ set.node_y }},
+                textX: {{ set.text_x }},
+                textY: {{ set.text_y }},
+                textTop: {{ set.text_top }},
+                dateTop: {{ set.date_top }},
+            }
+        };
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+{% endblock %}

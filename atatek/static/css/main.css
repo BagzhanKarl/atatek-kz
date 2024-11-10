@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.header{
+    position: fixed;
+    width: 100%;
+    z-index: 200;
+    background: white;
+    padding-top: 25px;
+}
+.header-container{
+    width: 100%;
+    max-width: 90%;
+    margin: 0 auto;
+    background: #A8D07A;
+    border-radius: 20px;
+    padding: 10px 15px;
+
+    -webkit-box-shadow: 0px 4px 4px 0px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 4px 4px 0px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 4px 4px 0px rgba(34, 60, 80, 0.2);
+    z-index: 1000;
+
+    color: white;
+
+}
+.brand{
+    font-weight: 700;
+    font-size: 23px;
+}
+.nav-brand{
+    font-weight: 700;
+    font-size: 23px;
+}
+
+.nav_links{
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all .8s;
+    margin-right: 30px;
+}
+.nav_links.active, .nav_links:hover{
+    border-bottom: 1px solid white;
+}
+
+.mobile-nav{
+    position: fixed;
+    right: -800px;
+    top: 0;
+    width: 90%;
+    height: 100vh;
+    background: white;
+    z-index: 10000;
+    padding: 0 20px;
+    padding-top: 42px;
+
+    -webkit-box-shadow: -5px 4px 18px 0px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: -5px 4px 18px 0px rgba(34, 60, 80, 0.2);
+    box-shadow: -5px 4px 18px 0px rgba(34, 60, 80, 0.2);
+    transition: all .8s ease-in-out;
+}
+.active-nav{
+    right: 0;
+}
+.sample{
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+.samplepage {
+    background-color: white;
+    width: 99%;
+    height: 99vh;
+    -ms-overflow-style: none; /* IE Р С‘ Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.samplepage::-webkit-scrollbar {
+    display: none; /* Chrome, Safari Р С‘ Opera */
+}
+.mob-links{
+
+}
+.mob-links div{
+    margin-bottom: 25px;
+}
+.mob-links div a{
+    text-decoration: none;
+    color: #2C2C2C;
+}
+.btn{
+    border-radius: 10px !important;
+    font-size: 18px !important;
+    background: #A8D07A !important;
+    border: none;
+}
+section.main{
+    padding-top: 150px;
+}
+.card{
+    -webkit-box-shadow: 0px 4px 4px 0px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 4px 4px 0px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 4px 4px 0px rgba(34, 60, 80, 0.2);
+
+    border-radius: 20px;
+    margin-bottom: 24px;
+}
+.profile-nav-links{
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(162, 206, 111, 0.43);
+    padding-top: 10px;
+    transition: all .4s;
+    margin-bottom: 8px;
+}
+.profile-nav-links:first-child{
+    border-top: 1px solid rgba(162, 206, 111, 0.43);
+}
+.profile-nav-links:hover{
+    background: rgb(162, 206, 111);
+    color: white;
+    border-radius: 8px;
+}
+.card-body, .card-header{
+    padding: 25px;
+}
+.form-phone-mask{
+    border: none;
+}
+.pers-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: 1001;
+    justify-content: end;
+    display: flex;
+    align-items: end;
+
+}
+
+.close-dark-panel{
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1009;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+.modal-container{
+    z-index: 1010;
+    width: 30%;
+    height: 100%;
+    background: white;
+    right: 0;
+    border-radius: 18px 0 0 18px;
+    padding: 25px;
+    -webkit-box-shadow: 0px 4px 4px 0px rgba(0, 0, 0.75);
+    -moz-box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.75);
+
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1200px) {
+    .modal-container {
+        width: 40%;
+    }
+}
+
+@media (max-width: 992px) {
+    .modal-container {
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-container {
+        width: 100%;
+        height: 80%;
+        border-radius: 20px 20px 0 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-container {
+        width: 100%;
+        height: 80%;
+        border-radius: 20px 20px 0 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .modal-container {
+        width: 100%;
+        height: 80%;
+        border-radius: 20px 20px 0 0;
+    }
+}
+
+.plus-btn{
+
+}
