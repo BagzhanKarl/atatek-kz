@@ -1,7 +1,8 @@
+import json
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, make_response, url_for
 
-from atatek.db import Role, db, Config
+from atatek.db import Role, db, Config, Tree
 from atatek.utils import verify_jwt
 
 main_bp = Blueprint('Main', __name__)
@@ -32,8 +33,18 @@ def mainpage():
     page = request.page
     role = request.role
     jsfile = db.session.query(Role).filter_by(id=role).first()
-
-    return render_template('main/index.html', page=page, js=jsfile.js, set=settings)
+    start = db.session.query(Tree).filter_by(id=1).first()
+    startList = []
+    startList.append({
+        "id": start.id,
+        "name": start.name,
+        "gender": 'M',
+        "status": 'notmy',
+        "born": None,
+        "death": None,
+        "info": "have"
+    })
+    return render_template('main/index.html', page=page, js=jsfile.js, set=settings, start=json.dumps(startList))
 
 
 @main_bp.route('/test')

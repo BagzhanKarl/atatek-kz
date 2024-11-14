@@ -22,3 +22,16 @@ class Tree(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_by = db.Column(db.Integer, default=0, nullable=False)
     updated_by = db.Column(db.Integer, default=0, nullable=False)
+
+
+class TreeInfo(db.Model):
+    __tablename__ = 'tree_info'
+
+    id = db.Column(db.Integer, primary_key=True)
+    tree_id = db.Column(db.Integer, db.ForeignKey('tree.id'))
+    info = db.Column(db.Text, nullable=False)
+    tree_icon = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_by = db.Column(db.Integer, default=0, nullable=False)
+    updated_by = db.Column(db.Integer, default=0, nullable=False)

@@ -319,7 +319,7 @@ function get_places() {
     let query = $('#query').val();
 
     $.ajax({
-        url: 'http://127.0.0.1:5000/auth/register/get_place/',
+        url: '/auth/register/get_place/',
         method: 'POST',
         data: {
             country: country,

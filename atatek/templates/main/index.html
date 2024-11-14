@@ -17,6 +17,7 @@
                 <img src="{{ url_for('static', filename='images/0.svg') }}" width="25" class="a0" style="display: none" alt="">
             </button>
         </div>
+        {{ js }}
     </div>
     <div class="toast-container position-fixed bottom-0 start-0 p-3">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -30,45 +31,14 @@
             </div>
         </div>
     </div>
-    <div class="pers-modal" id="personal-modal" onclick="">
-        <div class="close-dark-panel" onclick="closeModal()"></div>
+    <div class="pers-modal" style="display:none;" id="personal-modal" onclick="">
         <div class="modal-container" id="modal-content">
-            <div class="header-personal-modal">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-3">
-                        <div>
-                            <img src="../images/flag-outline.svg" width="30" height="30" alt="">
-                        </div>
-                        <div class="h3 card-title">
-                            Алаш
-                        </div>
-                    </div>
-                    <button type="button" onclick="closeModal()" class="btn-close" aria-label="Close"></button>
-                </div>
-            </div>
-            <hr>
-            <div class="modal-body">
-                <div id="data">
-                    <div>Әзірше Алаш туралы ақпарат жоқ</div>
 
-                    <hr>
-                    <div class="d-flex gap-2 mb-3">
-                        <div><b>Ататектегі ID:</b></div>
-                        <div>1</div>
-                    </div>
-                    <div class="d-flex gap-2 align-items-center">
-                        <label for="">Бөлісу </label>
-                        <input type="text" id="link" readonly onclick="" class="form-control" value="https://alash.atatek.kz/share/1">
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
-        const familyData = [
-            { id: 1, name: 'Алаш', gender: 'M', status: 'notmy', born: null, death: null, info: "have"},
-        ];
+        const familyData = JSON.parse('{{ start|safe }}');;
         function noDate(name){
             const toastLiveExample = document.getElementById('liveToast')
             const toast = new bootstrap.Toast(toastLiveExample)
@@ -77,6 +47,21 @@
             setTimeout(() => {
                 toast.hide()
             }, 5000)
+        }
+        function closeModal(){
+            $('#personal-modal').hide();
+        }
+        function openInfo(id){
+            $('#personal-modal').show();
+            let url = `/api/get/${id}/info`;
+            $.ajax({
+                url: url,
+                method: 'POST',
+                success: function (answere){
+                    $('#modal-content').html(answere);
+
+                }
+            })
         }
         const theme = {
             colors: {
@@ -106,7 +91,9 @@
                 dateTop: {{ set.date_top }},
             }
         };
+        const filename = 'js/{{js}}';
+        const script = document.createElement('script');
+        script.src = "{{ url_for('static', filename='') }}" + filename;
+        document.body.appendChild(script);
     </script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
 {% endblock %}
