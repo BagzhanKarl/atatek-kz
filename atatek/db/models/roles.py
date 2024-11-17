@@ -7,7 +7,8 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True, nullable=False)
     js = db.Column(db.String(80), unique=True, nullable=False)
-    counted = db.Column(db.Integer, nullable=False, default=False)
+    add_child = db.Column(db.Integer, nullable=False, default=False)
+    add_info = db.Column(db.Integer, nullable=False, default=False)
 
     def __repr__(self):
         return '<Role %r>' % self.id

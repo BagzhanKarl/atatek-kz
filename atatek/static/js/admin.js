@@ -128,7 +128,7 @@ const createNodeTemplate = () => new go.Node('Spot',
 
 async function fetchAndAddFamilyData(id, name) {
     try {
-        const response = await fetch(`/php/tree/get_items.php?id=${id}`);
+        const response = await fetch(`/api/get/${id}/childs`);
         const result = await response.json();
 
         if (result.status) {
@@ -211,7 +211,6 @@ const initDiagram = (divId) => {
 
     const root = diagram.findNodeForKey(14);
     diagram.scale = 0.75;
-    diagram.scrollToRect(root.actualBounds);
 };
 
 

@@ -14,6 +14,7 @@ app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(api_bp)
 app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(tests, url_prefix='/admin/admin')
 
 
 with app.app_context():

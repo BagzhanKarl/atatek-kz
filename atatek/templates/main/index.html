@@ -92,6 +92,7 @@
             }
         };
         const filename = 'js/{{js}}';
+        console.log('{{ js }}')
         const script = document.createElement('script');
         script.src = "{{ url_for('static', filename='') }}" + filename;
         document.body.appendChild(script);

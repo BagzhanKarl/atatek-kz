@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, make_response, url_for, jsonify
 from sqlalchemy.sql.functions import user
 
-from atatek.db import Tree, db, Config, TreeInfo, Ticket
+from atatek.db import Tree, db, Config, TreeInfo, Ticket, Role
 from atatek.endpoints import auth_bp
 from atatek.endpoints.main import token_required
 from atatek.utils import get_tree_data
@@ -141,3 +141,14 @@ def edit_ticket(id):
     db.session.add(ticket)
     db.session.commit()
     return redirect('/my/tickets')
+
+@api_bp.route('/api/admin/roles/<int:id>/<string:type>/<int:value>', methods=["POST"])
+def edit_roles_data(id:int, type: str, value: int):
+    role = db.session.query(Role).filter_by(id=id).first()
+    if type == 'info':
+        role.add_info = value
+    elif type == 'child':
+        role.add_child = value
+    db.session.commit()
+
+    return jsonify({"status": True})

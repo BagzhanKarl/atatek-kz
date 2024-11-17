@@ -4,7 +4,10 @@ from flask import Blueprint, render_template, request, redirect, make_response, 
 
 from atatek.db import Role, db, Config, Tree
 from atatek.utils import verify_jwt
+import os
+print(os.getcwd())
 
+settings_path = os.path.join(os.path.dirname(__file__), '../utils/settings.json')
 main_bp = Blueprint('Main', __name__)
 
 def token_required(f):
@@ -26,10 +29,13 @@ def token_required(f):
             return response
         return f(*args, **kwargs)
     return decorated
+
+
 @main_bp.route('/')
 @token_required
 def mainpage():
-    settings = db.session.query(Config).first()
+    with open(settings_path, 'r') as file:
+        settings = json.load(file)
     page = request.page
     role = request.role
     jsfile = db.session.query(Role).filter_by(id=role).first()
@@ -50,9 +56,11 @@ def mainpage():
 @main_bp.route('/test')
 def testpage():
     role = Role(
-        title='Бастау',
-        js='main.js',
-        counted=0
+        title='Администратор',
+        js='admin.js',
+        add_child=10,
+        add_info=10,
+
     )
     db.session.add(role)
     db.session.commit()

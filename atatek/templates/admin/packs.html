@@ -1,0 +1,55 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+    Админ - Подписки
+{% endblock %}
+
+{% block container %}
+    <h2>Подписки</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="col">ID</th>
+                <th class="col">Тариф</th>
+                <th class="col">JS-файл</th>
+                <th class="col">К-во. добавления детей</th>
+                <th class="col">К-во. добавления информаций</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for role in roles %}
+                <tr>
+                    <th scope="row">{{ role.id }}</th>
+                    <td>{{ role.title }}</td>
+                    <td>{{ role.js }}</td>
+                    <td class="change"><input class="changer" data-type="child" data-id="{{ role.id }}"  type="text" style="border: none; background: none; width: 15%;"  readonly value="{{ role.add_child }}"></td>
+                    <td class="change"><input class="changer" data-type="info" data-id="{{ role.id }}" type="text" style="border: none; background: none; width: 15%;"  readonly value="{{ role.add_info }}"></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            console.log('correct');
+            $(".changer").dblclick(function(){
+                $(this).removeAttr('readonly');
+            });
+            $(".changer").on('change', function (){
+                var answer = window.confirm("Вы уверены?");
+                if(answer){
+                    let type = $(this).data('type');
+                    let id = $(this).data('id');
+                    let value = $(this).val();
+                    $.ajax({
+                        url: `/api/admin/roles/${id}/${type}/${value}`,
+                        method: "POST",
+                        success: function(answer){
+                            console.log('Поменяли');
+                        }
+                    })
+                }
+            })
+        });
+    </script>
+{% endblock %}
