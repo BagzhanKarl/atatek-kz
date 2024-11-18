@@ -1,5 +1,7 @@
-import requests
+from os.path import exists
 
+import requests
+from atatek.db import db, Places
 
 def get_data(query: str, country: str):
     url = 'https://nominatim.openstreetmap.org/search.php?format=jsonv2&q='
@@ -9,7 +11,20 @@ def get_data(query: str, country: str):
     response = requests.get(url + query + "+" + country, headers=headers)
     data = response.json()
 
-    # Фильтруем только объекты с addresstype='town'
+    for item in data:
+        exists_place = db.session.query(Places).filter_by(osm=item['osm_id']).first()
+        if not exists_place:
+            place = Places(
+                osm=item['osm_id'],
+                lat=item['lat'],
+                lon=item['lon'],
+                type=item['type'],
+                name=item['name'],
+                display_name=item['display_name'],
+            )
+            db.session.add(place)
+    db.session.commit()
+
     filtered_data = [
         {
             'display_name': item['display_name'],

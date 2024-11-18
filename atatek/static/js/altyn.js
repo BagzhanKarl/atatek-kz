@@ -80,42 +80,48 @@ const createNodeTemplate = () => new go.Node('Spot',
         selectionAdorned: false,
         movable: false,
         click: async (e, node) => {
-            console.log(node.data.untouchable);
-            if(node.data.untouchable == false){
-                if (node.isTreeExpanded && node.findTreeChildrenNodes().count > 0) {
-                    diagram.commandHandler.collapseTree(node);
+            console.log('Клик');
+
+            if (node.isTreeExpanded && node.findTreeChildrenNodes().count > 0) {
+                diagram.commandHandler.collapseTree(node);
+            } else {
+                if (node.data.isLoaded) {
+                    diagram.commandHandler.expandTree(node);
+                    console.log('Данные уже загружены, просто разворачиваем узел');
                 } else {
-                    if (node.data.isLoaded) {
-                        diagram.commandHandler.expandTree(node);
-                        console.log('Данные уже загружены, просто разворачиваем узел');
-                    } else {
-                        try {
-                            console.log('Запрос данных...');
-                            const result = await fetchAndAddFamilyData(node.data.id, node.data.name);
-                            if (result.length > 0) {
-                                diagram.model.addNodeDataCollection(result);
-                                diagram.updateAllTargetBindings();
+                    try {
+                        console.log('Запрос данных...');
+                        const result = await fetchAndAddFamilyData(node.data.id, node.data.name);
+                        if (result.length > 0) {
+                            diagram.model.addNodeDataCollection(result);
+                            diagram.updateAllTargetBindings();
 
-                                diagram.model.setDataProperty(node.data, "isLoaded", true);
+                            diagram.model.setDataProperty(node.data, "isLoaded", true);
 
-                                diagram.commandHandler.expandTree(node);
-                                console.log('Данные загружены и узел развернут');
-                            }
-                        } catch (error) {
-                            console.error('Ошибка при загрузке данных:', error);
+                            diagram.commandHandler.expandTree(node);
+                            console.log('Данные загружены и узел развернут');
                         }
+                    } catch (error) {
+                        console.error('Ошибка при загрузке данных:', error);
                     }
                 }
-
-                const clickedNode = diagram.findNodeForKey(node.data.id);
-                if (clickedNode) {
-                    diagram.centerRect(clickedNode.actualBounds);
-                }
-
-                if (!e.handled) {
-                    e.handled = true;
-                }
             }
+
+            const clickedNode = diagram.findNodeForKey(node.data.id);
+            if (clickedNode) {
+                diagram.centerRect(clickedNode.actualBounds);
+            }
+
+            if (!e.handled) {
+                e.handled = true;
+            }
+        },
+        contextClick: (e, node) => {
+            // Обработчик для правой кнопки мыши
+            console.log(`Имя: ${node.data.name}, ID: ${node.data.id}`);
+            e.handled = true;
+            openInfo(node.data.id);
+
         }
     }).add(
     new go.Panel('Spot').add(
@@ -129,7 +135,7 @@ const createNodeTemplate = () => new go.Node('Spot',
 
 async function fetchAndAddFamilyData(id, name) {
     try {
-        const response = await fetch(`/php/tree/get_items.php?id=${id}`);
+        const response = await fetch(`/api/get/${id}/childs`);
         const result = await response.json();
 
         if (result.status) {
@@ -142,8 +148,7 @@ async function fetchAndAddFamilyData(id, name) {
                     born: member.birth_year,
                     death: member.death_year,
                     parent: parseInt(member.parent_id),
-                    info: member.info,
-                    untouchable: false
+                    info: member.info
                 }));
 
             if (newMembers.length === 0) {
@@ -200,6 +205,7 @@ const initDiagram = (divId) => {
         })
     });
 
+    diagram.toolManager.contextMenuTool.isEnabled = false;
     // Добавляем нужные параметры для улучшения поведения диаграммы
     diagram.initialAutoScale = go.Diagram.Uniform;  // Автоматическое масштабирование диаграммы
     diagram.isViewportSized = false;  // Разрешаем диаграмме быть больше видимой области
@@ -267,3 +273,4 @@ function printDiagram() {
 
 // Привязываем функцию переключения угла к кнопке
 document.getElementById('toggleAngle').addEventListener('click', toggleAngle);
+document.addEventListener('contextmenu', (e) => e.preventDefault());

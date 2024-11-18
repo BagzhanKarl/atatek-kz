@@ -31,7 +31,7 @@ const personBadge = () => {
     const badge = new go.Panel('Auto',
         {
             alignmentFocus: go.Spot.TopRight,
-            alignment: new go.Spot(1, 0, -10, STROKE_WIDTH  + 2),
+            alignment: new go.Spot(1, 0, -10, STROKE_WIDTH - 0.5),
             visible: false
         }).add(new go.Shape({
             figure: 'RoundedRectangle', parameter1: CORNER_ROUNDNESS,
@@ -115,6 +115,13 @@ const createNodeTemplate = () => new go.Node('Spot',
             if (!e.handled) {
                 e.handled = true;
             }
+        },
+        contextClick: (e, node) => {
+            // Обработчик для правой кнопки мыши
+            console.log(`Имя: ${node.data.name}, ID: ${node.data.id}`);
+            e.handled = true;
+            openInfo(node.data.id);
+
         }
     }).add(
     new go.Panel('Spot').add(
@@ -128,9 +135,9 @@ const createNodeTemplate = () => new go.Node('Spot',
 
 async function fetchAndAddFamilyData(id, name) {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/api/get/${id}`);
+        const response = await fetch(`/api/get/${id}/childs`);
         const result = await response.json();
-        console.log(result)
+
         if (result.status) {
             const newMembers = result.data
                 .map(member => ({
@@ -266,3 +273,4 @@ function printDiagram() {
 
 // Привязываем функцию переключения угла к кнопке
 document.getElementById('toggleAngle').addEventListener('click', toggleAngle);
+document.addEventListener('contextmenu', (e) => e.preventDefault());

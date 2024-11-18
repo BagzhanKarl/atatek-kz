@@ -2,7 +2,7 @@ import json
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, make_response, url_for
 
-from atatek.db import Role, db, Config, Tree
+from atatek.db import Role, db, Tree
 from atatek.utils import verify_jwt
 import os
 print(os.getcwd())

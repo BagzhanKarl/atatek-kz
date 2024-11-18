@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center gap-3">
             <div>
                 {% if item_more.tree_icon %}
-                    <img src="static/images/{{ tree_icon }}" id="item_image" width="30" height="30" alt="">
+                    <img src="static/images/icons/{{ item_more.tree_icon }}" onclick="BigImgshow()" id="item_image" width="30" height="30" alt="">
                 {% else %}
                     <img src="{{ url_for('static', filename='images/flag-outline.svg') }}" id="item_image" width="30" height="30" alt="">
                 {% endif %}
@@ -49,8 +49,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div id="item_info">
-                {% if item_more.text %}
-                    {{ item_more.text }}
+                {% if item_more.info %}
+                    {{ item_more.info }}
                 {% else %}
                     {{ item.name }} туралы уақытша ақпарат жоқ!
                 {% endif %}
@@ -74,8 +74,8 @@
             <div class="tabs mt-3" style="height: 75vh;">
                 <div class="tab" id="info" style="display: flex; height: 100%; flex-direction: column">
                     <div id="item_info">
-                        {% if item_more.text %}
-                            {{ item_more.text }}
+                        {% if item_more.info %}
+                            {{ item_more.info }}
                         {% else %}
                             {{ item.name }} туралы уақытша ақпарат жоқ!
                         {% endif %}
@@ -135,7 +135,6 @@
                     </form>
                 </div>
             </div>
-
             <script>
                 $('.nav-link').on('click', function () {
                     let tab = $(this).data('page');
@@ -152,7 +151,6 @@
                     $('#' + tab).show();
                 });
             </script>
-
         {% elif role == 5 %}
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -164,12 +162,18 @@
                 <li class="nav-item">
                     <a class="nav-link" data-page="edit">Өзгерту</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="newsite">Сайт</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-page="delete">Жою</a>
+                </li>
             </ul>
             <div class="tabs mt-3" style="height: 75vh;">
                 <div class="tab" id="info" style="display: flex; height: 100%; flex-direction: column">
                     <div id="item_info">
-                        {% if item_more.text %}
-                            {{ item_more.text }}
+                        {% if item_more.info %}
+                            {{ item_more.info }}
                         {% else %}
                             {{ item.name }} туралы уақытша ақпарат жоқ!
                         {% endif %}
@@ -190,13 +194,13 @@
                         </div>
                         <div class="btn-part d-flex justify-content-between">
                             <button type="button" onclick="newField()" class="btn btn-outline-primary" style="font-size: 14px !important;">Жаңа жол қосу</button>
-                            <button class="btn btn-primary" style="font-size: 14px !important;">Сұраныс жіберу</button>
+                            <button class="btn btn-primary" style="font-size: 14px !important;">Сақтау</button>
                         </div>
                     </form>
 
                 </div>
                 <div class="tab" style="display:none;" id="edit">
-                    <form action="api/admin/edit/{{ item.id }}" method="POST">
+                    <form action="api/admin/edit/{{ item.id }}" method="POST" enctype="multipart/form-data">
                         <div class="form-title h4">Ақпарат қосу немесе өзгерту</div>
                         <hr>
                         <div class="mb-2">
@@ -218,10 +222,60 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <textarea name="info" id="" class="form-control" placeholder="{{ item.name }} туралы ақпаратты енгізіңіз!" rows="10">{{ item_more.text }}</textarea>
+                            <textarea name="info" id="" class="form-control" placeholder="{{ item.name }} туралы ақпаратты енгізіңіз!" rows="5">{{ item_more.info }}</textarea>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="">Иконка</label>
+                                <input type="file" name="icon" class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="">Толық сурет</label>
+                                <input type="file" name="full-icon" class="form-control">
+                            </div>
                         </div>
                         <div class="text-end">
-                            <button class="btn btn-primary" style="font-size: 14px !important;">Өзгерту</button>
+                            <button class="btn btn-primary" style="font-size: 14px !important;">Сақтау</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab" style="display:none;" id="delete">
+                    <div class="text-center">
+                        <h3>"{{ item.name }}" жазбасын өшіреміз бе?</h3>
+                        <p>Жойылған ақпарат қайтадан кері қайтарылмайды, тек жаңадан қоса аласыз. </p>
+                        <p><a href="/api/admin/delete/node/{{ item.id }}" class="btn btn-danger">Ия өшіру</a></p>
+                    </div>
+                </div>
+                <div class="tab" style="display: none" id="newsite">
+                    <form action="/admin/newsite/" method="POST">
+                        <div class="mb-3">
+                            <label for="">Жүз</label>
+                            <select name="jyz" id="" class="form-control">
+                                <option value="Ұлы жүз">Ұлы жүз</option>
+                                <option value="Орта жүз">Орта жүз</option>
+                                <option value="Кіші жүз">Кіші жүз</option>
+                                <option value="Жүзден тыс">Жүзден тыс</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="">Сайттың аты</label>
+                            <input type="text" name="title" required value="{{ item.name }}" class="form-control">
+                        </div>
+                        <input type="text" hidden="" name="item" value="{{ item.id }}">
+                        <div class="mb-3">
+                            <label for="">1 - ұрпақ</label>
+                            <input type="text" name="breed1" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="">2 - ұрпақ</label>
+                            <input type="text" name="breed2" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="">3 - ұрпақ</label>
+                            <input type="text" name="breed3" required class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary">Сақтау</button>
                         </div>
                     </form>
                 </div>
@@ -246,9 +300,29 @@
         {% endif %}
     </div>
 </div>
-
+<style>
+    .image-pop{
+        position: fixed;
+        background: rgba(0, 0, 0, .8);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="image-pop" style="display: none" onclick="BigImghide()">
+    <img src="static/images/icons/{{ item_more.tree_full_icon }}" style="height: 300px; width: 300px; object-fit: cover">
+</div>
 <script>
-
+    function BigImgshow(){
+        $('.image-pop').show();
+    }
+    function BigImghide(){
+        $('.image-pop').hide();
+    }
     function copyLink() {
         $('#link').select()
         document.execCommand('copy');

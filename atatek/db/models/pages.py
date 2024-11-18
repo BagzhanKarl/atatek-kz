@@ -8,8 +8,8 @@ class Page(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, index=True)
     title = db.Column(db.String(255))
-    juz = db.Column(db.String(255), index=True)
+    juz = db.Column(db.String(255))
     breed1 = db.Column(db.String(255))
     breed2 = db.Column(db.String(255))
     breed3 = db.Column(db.String(255))
-    item = db.Column(db.Integer, index=True)
+    item = db.Column(db.Integer)
