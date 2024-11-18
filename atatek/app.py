@@ -1,5 +1,5 @@
 # assem/app.py
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from atatek.db import db, Page
 from atatek.endpoints import *
 
@@ -17,6 +17,25 @@ app.register_blueprint(profile)
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(tests, url_prefix='/admin/admin')
 
+
+@app.route('/landing')
+def landing():
+    return jsonify({"status": True, "data": "Coming soon"})
+@app.route('/uly')
+def uly():
+    return jsonify({"status": True, "data": "Coming soon"})
+
+@app.route('/orta')
+def orta():
+    return jsonify({"status": True, "data": "Coming soon"})
+
+@app.route('/kishi')
+def kishi():
+    return jsonify({"status": True, "data": "Coming soon"})
+
+@app.route('/jyzdentys')
+def jyzdentys():
+    return jsonify({"status": True, "data": "Coming soon"})
 
 with app.app_context():
     db.create_all()
