@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, make_response, url_for, jsonify
 from sqlalchemy.sql.functions import user
 
-from atatek.db import Tree, db, TreeInfo, Ticket, Role
+from atatek.db import Tree, db, TreeInfo, Ticket, Role, Page
 from atatek.endpoints import auth_bp
 from atatek.endpoints.main import token_required
 from atatek.utils import get_tree_data
@@ -16,6 +16,15 @@ def start():
         name='Алаш'
     )
     db.session.add(tree)
+    page = Page(
+        title='Test',
+        breed1='test',
+        breed2='test',
+        breed3='test',
+        juz='test',
+        item=1,
+    )
+    db.session.add(page)
     db.session.commit()
     return 'nice'
 
@@ -58,6 +67,7 @@ def get_data(id):
                     'death_year': item['death_year'],
                     'parent_id': node.id,
                     'info': info,
+                    'untouchable': False,
                     'status': 'true'
                 })
 
@@ -82,6 +92,7 @@ def get_data(id):
                 'death_year': item.death_year,
                 'parent_id': node.id,
                 'info': info,
+                'untouchable': False,
                 'status': 'true'
             })
         response = {

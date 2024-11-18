@@ -81,39 +81,40 @@ const createNodeTemplate = () => new go.Node('Spot',
         movable: false,
         click: async (e, node) => {
             console.log('Клик');
-
-            if (node.isTreeExpanded && node.findTreeChildrenNodes().count > 0) {
-                diagram.commandHandler.collapseTree(node);
-            } else {
-                if (node.data.isLoaded) {
-                    diagram.commandHandler.expandTree(node);
-                    console.log('Данные уже загружены, просто разворачиваем узел');
+            if(node.data.untouchable == false) {
+                if (node.isTreeExpanded && node.findTreeChildrenNodes().count > 0) {
+                    diagram.commandHandler.collapseTree(node);
                 } else {
-                    try {
-                        console.log('Запрос данных...');
-                        const result = await fetchAndAddFamilyData(node.data.id, node.data.name);
-                        if (result.length > 0) {
-                            diagram.model.addNodeDataCollection(result);
-                            diagram.updateAllTargetBindings();
+                    if (node.data.isLoaded) {
+                        diagram.commandHandler.expandTree(node);
+                        console.log('Данные уже загружены, просто разворачиваем узел');
+                    } else {
+                        try {
+                            console.log('Запрос данных...');
+                            const result = await fetchAndAddFamilyData(node.data.id, node.data.name);
+                            if (result.length > 0) {
+                                diagram.model.addNodeDataCollection(result);
+                                diagram.updateAllTargetBindings();
 
-                            diagram.model.setDataProperty(node.data, "isLoaded", true);
+                                diagram.model.setDataProperty(node.data, "isLoaded", true);
 
-                            diagram.commandHandler.expandTree(node);
-                            console.log('Данные загружены и узел развернут');
+                                diagram.commandHandler.expandTree(node);
+                                console.log('Данные загружены и узел развернут');
+                            }
+                        } catch (error) {
+                            console.error('Ошибка при загрузке данных:', error);
                         }
-                    } catch (error) {
-                        console.error('Ошибка при загрузке данных:', error);
                     }
                 }
-            }
 
-            const clickedNode = diagram.findNodeForKey(node.data.id);
-            if (clickedNode) {
-                diagram.centerRect(clickedNode.actualBounds);
-            }
+                const clickedNode = diagram.findNodeForKey(node.data.id);
+                if (clickedNode) {
+                    diagram.centerRect(clickedNode.actualBounds);
+                }
 
-            if (!e.handled) {
-                e.handled = true;
+                if (!e.handled) {
+                    e.handled = true;
+                }
             }
         },
         contextClick: (e, node) => {
@@ -148,7 +149,8 @@ async function fetchAndAddFamilyData(id, name) {
                     born: member.birth_year,
                     death: member.death_year,
                     parent: parseInt(member.parent_id),
-                    info: member.info
+                    info: member.info,
+                    untouchable: member.untouchable,
                 }));
 
             if (newMembers.length === 0) {
