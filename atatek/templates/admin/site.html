@@ -1,0 +1,114 @@
+{% extends('admin/base.html') %}
+
+{% block title %}Сайты{% endblock %}
+
+{% block container %}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+    :host #discipline-qe /deep/ .ql-container{
+      height: 250px;
+    }
+
+    </style>
+    <div class="card">
+        <div class="card-body">
+            <h2>Сайты: {{ page.title }}</h2>
+            <hr>
+            <div class="mb-2 row">
+                <div class="col-2">Ссылки:</div>
+                <div class="col-10">
+                    {% if page.juz == 'Ұлы жүз' %}
+                        <a target="_blank" href="https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}</a>
+                        <br>
+                        <a target="_blank" href="https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news</a>
+                    {% elif page.juz == 'Орта жүз' %}
+                        <a target="_blank" href="https://orta-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}</a>
+                        <br>
+                        <a target="_blank" href="https://orta-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news</a>
+                    {% elif page.juz == 'Кіші жүз' %}
+                        <a target="_blank" href="https://kishi-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}</a>
+                        <br>
+                        <a target="_blank" href="https://kishi-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news</a>
+                    {% elif page.juz == 'Жүзден тыс' %}
+                        <a target="_blank" href="https://jyzden-tys.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}</a>
+                        <br>
+                        <a target="_blank" href="https://jyzden-tys.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news">https://uly-jyz.atatek.kz/{{ page.breed1 }}/{{ page.breed2 }}/{{ page.breed3 }}/news</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">Модератор:</div>
+                <div class="col-10">
+                    {% if moderator %}
+                        <a href="/admin/user{{ moderator.id }}" target="_blank">{{ moderator.first_name }} {{ moderator.last_name }}</a>
+                    {% else %}
+                        Пока не назначено
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex gap-3">
+                <button class="btn btn-primary">Назначить модератора</button>
+                <button class="btn btn-info">Опубликовать новость</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="card mt-4" style="display: none" id="news-form">
+        <div class="card-body">
+            <h4>Опубликовать новость</h4>
+            <form action="" method="post" id="newsForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="">Название</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="">Постер</label>
+                    <input type="file" name="poster" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="">Контент</label>
+                    <div id="editor" name="content" class="form-control"></div>
+                </div>
+                <hr>
+                <button class="btn btn-primary" type="button" id="publishButton">Жариялау</button>
+            </form>
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Новости</h3>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <script>
+        const quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{ header: [2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['link'],
+                ],
+            },
+            placeholder: 'Контент ...',
+            theme: 'snow', // or 'bubble'
+        });
+
+        document.getElementById('publishButton').addEventListener('click', function() {
+            // Собираем данные формы
+            const htmlContent = quill.root.innerHTML;
+            const formData = new FormData(document.getElementById('newsForm'));
+            formData.append('content', htmlContent); // Добавляем контент из Quill
+
+            // Отправляем форму на сервер
+            fetch('{{ page.id }}/save_news', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(window.location.reload());
+        });
+    </script>
+{% endblock %}

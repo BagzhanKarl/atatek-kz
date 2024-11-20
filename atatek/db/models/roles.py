@@ -10,5 +10,8 @@ class Role(db.Model):
     add_child = db.Column(db.Integer, nullable=False, default=False)
     add_info = db.Column(db.Integer, nullable=False, default=False)
 
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
     def __repr__(self):
-        return '<Role %r>' % self.id
+        return f'<Role {self.id}>'

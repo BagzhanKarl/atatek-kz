@@ -127,7 +127,7 @@ def add_child(id):
         )
         db.session.add(ticket)
     db.session.commit()
-    return redirect('/my/tickets')
+    return redirect('/profile#tickets')
 
 @api_bp.route('/api/edit/<int:id>', methods=['POST'])
 @token_required
@@ -152,7 +152,7 @@ def edit_ticket(id):
     )
     db.session.add(ticket)
     db.session.commit()
-    return redirect('/my/tickets')
+    return redirect('/profile#tickets')
 
 @api_bp.route('/api/admin/add/childs/<int:id>', methods=['POST'])
 @token_required

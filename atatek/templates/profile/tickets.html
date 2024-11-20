@@ -1,0 +1,81 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Тикет - №{{ ticket.id }}
+{% endblock %}
+
+{% block my_page %} {{ page }} {% endblock %}
+{% block newsmy %} {{ page }} {% endblock %}
+{% block mymb %} {{ page }} {% endblock %}
+{% block newsmymb %} {{ page }} {% endblock %}
+
+{% block body %}
+    <section class="main">
+        <div class="main-container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card" style="position: sticky; top: 150px">
+                        <div class="card-body">
+                            <img src="{{ url_for('static', filename='images/avatar.png') }}" width="100%" style="border-radius: 20px" alt="">
+{#                            <button class="btn btn-secondary w-100 mt-3">Өзгерту</button>#}
+                            <a href="/auth/logout" class="btn btn-danger w-100 mt-3">Шығу</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="user-info">
+                                <div class="user-name h3">{{first_name}} {{ last_name }}</div>
+                            </div>
+                            <hr>
+                            <div class="user-referal-link d-flex">
+                                <label>Сіздің рефералды сілтемеңіз: </label>
+                                <input type="text" id="referal-link" readonly value="https://alash.atatek.kz/auth/register/step1/{{ id }}" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            {% if ticket.type == 'edit' %}
+                                <div class="h3">Өзгерту</div>
+                                <hr>
+                                {% if ticket.is_active %}
+                                    <span class="badge text-bg-secondary">Қаралымда</span>
+                                {% elif ticket.is_cancelled %}
+                                    <span class="badge text-bg-danger">Қабылданбады</span>
+                                {% elif ticket.is_completed %}
+                                    <span class="badge text-bg-primary">Қабылданды</span>
+                                {% endif %}
+                                <div class="d-flex gap-3 mb-2 mt-3">
+                                    <div>Есімі:</div>
+                                    <div class="fw-bold">{{ ticket.name }}</div>
+                                </div>
+                                <div class="d-flex gap-3 mb-2">
+                                    <div>Туған жылы:</div>
+                                    <div class="fw-bold">{{ ticket.birth }}</div>
+                                    <div>Қайтыс болған жыл:</div>
+                                    <div class="fw-bold">{{ ticket.dead }}</div>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <div>Ақпарат:</div>
+                                    {{ ticket.info }}
+                                </div>
+                            {% else %}
+                                Қосу
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function (){
+            $("#referal-link").on('click', function (){
+                $(this).select();
+                document.execCommand('copy')
+            })
+        })
+    </script>
+{% endblock %}

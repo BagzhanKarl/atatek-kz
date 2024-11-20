@@ -5,3 +5,4 @@ from .pages import Page
 from .roles import Role
 from .transaction import Transaction
 from .tickets import Ticket
+from .news import News

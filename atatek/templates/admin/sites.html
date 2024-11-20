@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends('admin/base.html') %}
 
-</body>
-</html>
+{% block title %}Сайты{% endblock %}
+
+{% block container %}
+    <div class="card">
+        <div class="card-body">
+            <h2>Сайты</h2>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="col">ID</th>
+                    <th class="col">Название</th>
+                    <th class="col">Жуз</th>
+                    <th class="col">Путь</th>
+                    <th class="col">Дополнительно</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for page in pages %}
+                    <tr>
+                        <th scope="row">{{ page.id }}</th>
+                        <td>{{ page.title }}</td>
+                        <td>{{ page.juz }}</td>
+                        <td>{{ page.breed1 }} &#8594; {{ page.breed2 }} &#8594; {{ page.breed3 }}</td>
+                        <td><a href="/admin/site/{{ page.id }}">Настройки</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

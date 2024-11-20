@@ -20,8 +20,9 @@ class User(db.Model):
 
     page = db.Column(db.Integer, nullable=True)
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
 
 class Referral(db.Model):
     __tablename__ = 'referrals'
@@ -29,7 +30,7 @@ class Referral(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     referrer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Кто пригласил
     referred_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  # Кто зарегистрировался
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     # Уникальность пары (referrer_id, referred_id)
     __table_args__ = (db.UniqueConstraint('referrer_id', 'referred_id', name='unique_referral'),)
@@ -50,6 +51,7 @@ class Places(db.Model):
     name = db.Column(db.String(250), nullable=False)
     display_name = db.Column(db.String(250), nullable=False)
 
+
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
 
@@ -58,7 +60,7 @@ class Subscription(db.Model):
     role = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     addchild = db.Column(db.Integer, nullable=False, default=False)
     addinfo = db.Column(db.Integer, nullable=False, default=False)
-    start_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)  # Дата начала
+    start_date = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)  # Дата начала
     end_date = db.Column(db.DateTime, nullable=False)  # Дата окончания
 
     def __init__(self, **kwargs):

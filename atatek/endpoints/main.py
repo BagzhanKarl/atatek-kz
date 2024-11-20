@@ -48,7 +48,8 @@ def mainpage():
         "status": 'notmy',
         "born": None,
         "death": None,
-        "info": "have"
+        "info": "have",
+        "untouchable": False,
     })
     return render_template('main/index.html', page=page, js=jsfile.js, set=settings, start=json.dumps(startList))
 
