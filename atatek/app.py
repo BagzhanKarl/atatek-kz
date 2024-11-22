@@ -3,7 +3,7 @@ from atatek.db import db
 from atatek.endpoints import *
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/atatek'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://atatek:atatek@localhost/atatek'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TIMEZONE'] = 'UTC'  # или 'Asia/Almaty'
