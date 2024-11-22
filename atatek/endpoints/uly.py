@@ -8,7 +8,6 @@ from atatek.utils.get_parent_list import get_list_for_tree
 ulyjyz = Blueprint("pages", __name__)
 
 @ulyjyz.route("/uly/<string:bread1>/<string:bread2>/<string:bread3>")
-@token_required
 def uly(bread1, bread2, bread3):
     page = db.session.query(Page).filter_by(breed1=bread1, breed2=bread2, breed3=bread3).first()
     if page.juz != 'Ұлы жүз':
