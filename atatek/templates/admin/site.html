@@ -49,7 +49,7 @@
             <hr>
             <div class="d-flex gap-3">
                 <button class="btn btn-primary">Назначить модератора</button>
-                <button class="btn btn-info">Опубликовать новость</button>
+                <button class="btn btn-info" onclick="openFormNews()">Опубликовать новость</button>
             </div>
 
         </div>
@@ -110,5 +110,9 @@
             }).then(response => response.json())
               .then(window.location.reload());
         });
+
+        function openFormNews(){
+            $('#news-form').show();
+        }
     </script>
 {% endblock %}

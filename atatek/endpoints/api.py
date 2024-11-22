@@ -9,24 +9,6 @@ from atatek.utils.adminicons import save_file
 
 api_bp = Blueprint('api', __name__)
 
-@api_bp.route('/start')
-def start():
-    tree = Tree(
-        item_id=14,
-        name='Алаш'
-    )
-    db.session.add(tree)
-    page = Page(
-        title='Test',
-        breed1='test',
-        breed2='test',
-        breed3='test',
-        juz='test',
-        item=1,
-    )
-    db.session.add(page)
-    db.session.commit()
-    return 'nice'
 
 @api_bp.route('/api/get/<id>/childs')
 def get_data(id):
@@ -240,3 +222,11 @@ def edit_roles_data(id:int, type: str, value: int):
     db.session.commit()
 
     return jsonify({"status": True})
+
+
+@api_bp.route('/api/get/all/pages', methods=['POST'])
+@token_required
+def get_all_pages():
+    juz = request.form['juz']
+    pages = db.session.query(Page).filter_by(juz=juz).all()
+    return render_template('modals/options.html', pages=pages)

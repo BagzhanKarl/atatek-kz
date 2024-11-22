@@ -1,3 +1,5 @@
+from sqlalchemy import text
+
 from atatek.db import db
 from sqlalchemy.sql import func
 
@@ -9,4 +11,4 @@ class Verify(db.Model):
     code = db.Column(db.Integer, nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=func.now())  # Устанавливаем текущее серверное время
-    before_time = db.Column(db.DateTime, server_default=func.now() + func.interval(3, 'minute'))  # Устанавливаем серверное время + 3 минуты
+    before_time = db.Column(db.DateTime, server_default=func.now())
